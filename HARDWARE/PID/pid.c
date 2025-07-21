@@ -357,8 +357,3 @@ void set_straight_target_angle(float angle)
   g_pid_straight_angle.integral = 0.0f;
   g_pid_straight_angle.err_last = 0.0f;
 }
-
-void inf_pid_control(_pid *p)
-{
-  int inf_
-}

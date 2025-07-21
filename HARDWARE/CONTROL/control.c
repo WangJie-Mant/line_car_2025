@@ -47,8 +47,11 @@ uint8_t g_Angle_Flag = 0;            // 角度环调试标志位
 int32_t g_line_num = 0;  // 灰度巡线偏移量
 float g_line_outval = 0; // 巡线差值量
 int32_t g_yaw_err = 0;   // 角度偏移量
+int32_t g_line_err = 0;  // 巡线误差
 
 extern uint8_t g_mode; // 运行哪个功能
+
+double line_weights[4] = {2.0, 1.0, 1.0, 2.0}; // 灰度传感器权重。在line.c中已经将line_num设置了正负号，这里只需要正数
 
 float angle_compensation = 0;
 float target_angle = 0;
@@ -70,102 +73,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         g_motor1_journey_cm = (g_sigma_motor1pluse / (REDUCTION_RATIO * ENCODER_TOTAL_RESOLUTION)) * (WHEEL_D * 3.1416);
         g_motor2_journey_cm = (g_sigma_motor2pluse / (REDUCTION_RATIO * ENCODER_TOTAL_RESOLUTION)) * (WHEEL_D * 3.1416);
 
-        /* ***** */
-
-        //        /*****上位机调试速度环PID时用,实际运行时注释掉*****/
-        //          /* pid控制 */
-        //        if(g_is_motor1_en == 1)
-        //        {
-        //            g_motor1_pwm = speed1_pid_control();
-        //        }
-        //        if(g_is_motor2_en == 1)
-        //        {
-        //            g_motor2_pwm = speed2_pid_control();
-        //        }
-        //        /* 限幅 */
-        //        limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //        /* 装载 */
-        //        load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-
-        /******/
-        //
-        //        if(g_mode == 2 || g_mode == 3)
-        //        {
-        //            /******上位机调试位置速度串级PID时用，实际使用时注释掉******/
-        //            if(g_is_motor1_en == 1 && g_is_motor2_en == 1)
-        //            {
-        //                /* pid控制 */
-        //                location_speed_control();
-        //                g_motor1_pwm = g_speed1_outval;
-        //                g_motor2_pwm = g_speed2_outval;
-        //
-        //                /* 限幅 */
-        //                limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //                /* 装载 */
-        //                load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-        //            }
-        //        }
-        //
-        //        /* ***** */
-        //
-        //        if(g_mode == 4)
-        //        {
-        //            /****** 上位机调试角度速度串级PID时用，实际使用时注释掉 ******/
-        //            if(g_Angle_Flag == 1)
-        //            {
-        //                if(g_is_motor1_en == 1 && g_is_motor2_en == 1)
-        //                {
-        //                    /* pid控制 */
-        //                    turn_angle_speed_control();
-        //                    g_motor1_pwm = g_speed3_outval;
-        //                    g_motor2_pwm = g_speed4_outval;
-        //
-        //                    /* 限幅 */
-        //                    limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //                    /* 装载 */
-        //                    load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-        //                }
-        //            }
-        //        }
-        //
-        //        /* ***** */
-        //
-        //        if(g_mode == 1)
-        //        {
-        //            /****** 上位机调试巡线速度串级PID时用，实际使用时注释掉 ******/
-        //            if(g_Line_Flag == 1)
-        //            {
-        //                if(g_is_motor1_en == 1 && g_is_motor2_en == 1)
-        //                {
-        //                    /* pid控制 */
-        //                    line_speed_control();
-        //
-        //                    g_motor1_pwm = g_speed3_outval;
-        //                    g_motor2_pwm = g_speed4_outval;
-        //                    /* 限幅 */
-        //                    limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //                    /* 装载 */
-        //                    load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-        //                }
-        //            }
-        //        }
-        /* ***** */
-
         /* 走稳稳的直线 */
         if (g_Gostraight_Angle_Flag == 1)
         {
-            //						if((g_motor1_journey_cm <= (g_ftarget_journey+25)) && (g_motor1_journey_cm >= (g_ftarget_journey-25)))  //这里偏差这么多真的好吗？并不是真的偏差
-            //            {
-            //                g_stop_count++;   //stop_count不能超过256
-            //                if(g_stop_count >= 100)  //100 * 20 = 1.6s  最少也要至少在目标位置停留1s  //可以时间判断放长点，以便刹车停稳
-            //                {
-            //                    g_Line_Flag = 0;
-            //                    g_Stop_Flag = 1; //这个标志位可以用来判断是否执行下一阶段任务
-            //                    g_stop_count = 0;
-            //                    set_motor1_disable();
-            //                    set_motor2_disable();
-            //                }
-            //            }
             if (g_motor1_journey_cm == g_ftarget_journey)
             {
                 g_Line_Flag = 0;
@@ -195,108 +105,90 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             }
         }
         /* 巡线 */
-        if (g_Line_Flag == 1)
+        if (g_motor1_journey_cm == g_ftarget_journey)
         {
-            // 来个判断，直行到达位置后停止PID控制，防止识别图片时或者等待装卸药时电机耗能，直走巡线结束的阶段才用这个，
-            // 其实这个要是用好一点的驱动模块的话，短时间内运行也不需要.....不用怕电机驱动过热...一直PID控制也没啥
-            //     调试位置速度串级PID时注释掉这个让电机失能的函数
-            //            if((g_motor1_journey_cm <= (g_ftarget_journey+25)) && (g_motor1_journey_cm >= (g_ftarget_journey-25)))  //这里偏差这么多真的好吗？并不是真的偏差
-            //            {
-            //                g_stop_count++;   //stop_count不能超过256
-            //                if(g_stop_count >= 100)  //100 * 20 = 1.6s  最少也要至少在目标位置停留1s  //可以时间判断放长点，以便刹车停稳
-            //                {
-            //                    g_Line_Flag = 0;
-            //                    g_Stop_Flag = 1; //这个标志位可以用来判断是否执行下一阶段任务
-            //                    g_stop_count = 0;
-            //
-            //                    set_motor1_disable();
-            //                    set_motor2_disable();
-            //                }
-            //            }
-            if (g_motor1_journey_cm == g_ftarget_journey)
-            {
-                g_Line_Flag = 0;
-                g_Stop_Flag = 1;
-                car_stop();
-            }
-            else
-            {
-                g_Stop_Flag = 0;
-                g_stop_count = 0;
-            }
-            if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
-            {
-                g_line_num = line_err();
-                location_speed_control(); //  位置环速度环串级PID的输出是速度环输出的PWM值
-                if (g_line_num == 0)      // 每次回到线上需要补偿的时候，都将两个电机的累计脉冲数取平均值，这个也会有在转向后帮助回到线上的效果
-                {
-                    long pulse;
-                    pulse = (g_sigma_motor1pluse + g_sigma_motor2pluse) / 2;
-                    g_sigma_motor1pluse = pulse; // 可能有时候这里加上个补偿会更好
-                    g_sigma_motor2pluse = pulse;
-                }
-                // 这个是灰度传感器的巡线补偿
-                g_line_outval = g_line_num; // g_line_num得在PWM的重装载值一半左右才会有明显的效果
-                g_motor1_pwm = g_speed1_outval + g_line_outval;
-                g_motor2_pwm = g_speed2_outval - g_line_outval;
-
-                limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
-                load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
-            }
+            g_Line_Flag = 0;
+            g_Stop_Flag = 1;
+            car_stop();
         }
-
-        /* ****** */
-
-        /* 转弯 */
-        if (g_Spin_Start_Flag == 1)
+        else
         {
-            if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
-            {
-                location_speed_control(); // 位置环速度环串级PID的输出是速度环输出的PWM值
-                g_motor1_pwm = g_speed1_outval;
-                g_motor2_pwm = g_speed2_outval;
-                g_spin_count++;
-                if (g_spin_count >= 100) // 20ms进入一次   100*20 = 2s，以能过够完成倒转时间为下限，应该已经倒转完毕了
-                {
-                    g_Spin_Start_Flag = 0;
-                    g_spin_count = 0;
-                    // 转向有点问题，转完之后还一直转,暂时用下面两句解决
-                    g_motor1_pwm = 0;
-                    g_motor2_pwm = 0;
-                    g_Spin_Succeed_Flag = 1;
-
-                    //                    //g_line_num = 0.0;   //转向时要避免记住上一次的补偿值吗？会影响到转弯后的巡线！！！
-                    //                    //在转向前有线的话，记住上一次的巡线补偿反而可以达到自回线的效果
-                    //                    //可以转向时转少一些！！至少让转向那一侧的灰度传感器打到线上，就可以达到自回线上的效果！！！
-                }
-                limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
-                load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
-            }
+            g_Stop_Flag = 0;
+            g_stop_count = 0;
         }
-        if (g_Angle_Flag == 1)
+        if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
         {
-            if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
+            g_line_num = line_err();
+            location_speed_control(); //  位置环速度环串级PID的输出是速度环输出的PWM值
+            if (g_line_num == 0)      // 每次回到线上需要补偿的时候，都将两个电机的累计脉冲数取平均值，这个也会有在转向后帮助回到线上的效果
             {
-                turn_angle_speed_control();
-                g_motor1_pwm = g_speed3_outval;
-                g_motor2_pwm = g_speed4_outval;
-                limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
-                load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
+                long pulse;
+                pulse = (g_sigma_motor1pluse + g_sigma_motor2pluse) / 2;
+                g_sigma_motor1pluse = pulse; // 可能有时候这里加上个补偿会更好
+                g_sigma_motor2pluse = pulse;
             }
-            if (g_current_angle <= target_angle + 0.8 && g_current_angle >= target_angle - 0.8)
-            {
-                count++;
-                if (count >= 8)
-                {
-                    count = 0;
-                    car_stop();
-                    g_Angle_Flag = 0;
-                }
-            }
-        }
+            // 这个是灰度传感器的巡线补偿
+            g_line_outval = g_line_num; // g_line_num得在PWM的重装载值一半左右才会有明显的效果
+            g_motor1_pwm = g_speed1_outval + g_line_outval;
+            g_motor2_pwm = g_speed2_outval - g_line_outval;
 
-        /* ***** */
+            limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
+            load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
+        }
     }
+
+    /* ****** */
+
+    /* 转弯 */
+    if (g_Spin_Start_Flag == 1)
+    {
+        if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
+        {
+            location_speed_control(); // 位置环速度环串级PID的输出是速度环输出的PWM值
+            g_motor1_pwm = g_speed1_outval;
+            g_motor2_pwm = g_speed2_outval;
+            g_spin_count++;
+            if (g_spin_count >= 100) // 20ms进入一次   100*20 = 2s，以能过够完成倒转时间为下限，应该已经倒转完毕了
+            {
+                g_Spin_Start_Flag = 0;
+                g_spin_count = 0;
+                // 转向有点问题，转完之后还一直转,暂时用下面两句解决
+                g_motor1_pwm = 0;
+                g_motor2_pwm = 0;
+                g_Spin_Succeed_Flag = 1;
+
+                //                    //g_line_num = 0.0;   //转向时要避免记住上一次的补偿值吗？会影响到转弯后的巡线！！！
+                //                    //在转向前有线的话，记住上一次的巡线补偿反而可以达到自回线的效果
+                //                    //可以转向时转少一些！！至少让转向那一侧的灰度传感器打到线上，就可以达到自回线上的效果！！！
+            }
+            limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
+            load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
+        }
+    }
+    if (g_Angle_Flag == 1)
+    {
+        if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
+        {
+            turn_angle_speed_control();
+            g_motor1_pwm = g_speed3_outval;
+            g_motor2_pwm = g_speed4_outval;
+            limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
+            load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
+        }
+        if (g_current_angle <= target_angle + 0.8 && g_current_angle >= target_angle - 0.8)
+        {
+            count++;
+            if (count >= 8)
+            {
+                count = 0;
+                car_stop();
+                g_Angle_Flag = 0;
+            }
+        }
+    }
+
+    /* ***** */
+}
 }
 
 /********小车控制函数********/
@@ -703,8 +595,8 @@ float line_pid_control(void)
     int32_t actual_speed;
 
     // 这里的实际值我给的是角度偏差的值，如果是灰度传感器巡线可以把传感器的值送进去
-    g_yaw_err = yaw_err0();
-    actual_speed = g_yaw_err;
+    g_line_err = line_err(); // 第一种可能的实现，通过line.c中的line_num作为误差进行pid控制，没有使用四个传感器的权重方式。调整也简单，需要更改line.c中的line_num的值，就能让它大一点或者小一点。
+    actual_speed = g_line_err;
 
     cont_val = line_pid_realize(&g_pid_line, actual_speed); // 进行 PID 计算
 
