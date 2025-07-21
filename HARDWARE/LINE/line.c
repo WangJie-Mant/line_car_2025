@@ -13,10 +13,9 @@ static float max_correction = 50.0f; // 最大转向修正值
  * @param       无
  * @retval      巡线偏移的值
  */
-int32_t line_err(void)
+int line_err(int32_t *line_data)
 {
     uint8_t hw1_val, hw2_val, hw3_val, hw4_val;
-    int32_t line_num;
 
     /* 读取并记录电平状态，这里根据实际01代表的情况修改，可能相反，传感器越多效果越好 */
     if (HW1 == 0)
@@ -52,26 +51,11 @@ int32_t line_err(void)
         hw4_val = 0;
     }
 
-    /* 巡线值 */
-    if (hw1_val == 0 && hw2_val == 0 && hw3_val == 0 && hw4_val == 0)
-        line_num = 0;
-    if (hw1_val == 1 && hw2_val == 0 && hw3_val == 0 && hw4_val == 0)
-        line_num = 10;
-    if (hw1_val == 0 && hw2_val == 1 && hw3_val == 0 && hw4_val == 0)
-        line_num = 20;
-    if (hw1_val == 0 && hw2_val == 0 && hw3_val == 1 && hw4_val == 0)
-        line_num = -10;
-    if (hw1_val == 0 && hw2_val == 0 && hw3_val == 0 && hw4_val == 1)
-        line_num = -20;
-
-    if (hw1_val == 0 && hw2_val == 1 && hw3_val == 1 && hw4_val == 0)
-        line_num = 0;
-    if (hw1_val == 1 && hw2_val == 1 && hw3_val == 0 && hw4_val == 0)
-        line_num = 15;
-    if (hw1_val == 0 && hw2_val == 0 && hw3_val == 1 && hw4_val == 1)
-        line_num = -15;
-
-    return line_num;
+    line_data[0] = hw1_val;
+    line_data[1] = hw2_val;
+    line_data[2] = hw3_val;
+    line_data[3] = hw4_val;
+    return 0;
 }
 
 /**

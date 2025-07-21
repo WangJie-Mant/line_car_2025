@@ -47,6 +47,8 @@ uint8_t g_Angle_Flag = 0;            // 角度环调试标志位
 int32_t g_line_num = 0;  // 灰度巡线偏移量
 float g_line_outval = 0; // 巡线差值量
 int32_t g_yaw_err = 0;   // 角度偏移量
+int32_t g_line_err = 0;
+uint8_t weight[4] = {-20, 10, 10, 20};
 
 extern uint8_t g_mode; // 运行哪个功能
 
@@ -197,22 +199,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         /* 巡线 */
         if (g_Line_Flag == 1)
         {
-            // 来个判断，直行到达位置后停止PID控制，防止识别图片时或者等待装卸药时电机耗能，直走巡线结束的阶段才用这个，
-            // 其实这个要是用好一点的驱动模块的话，短时间内运行也不需要.....不用怕电机驱动过热...一直PID控制也没啥
-            //     调试位置速度串级PID时注释掉这个让电机失能的函数
-            //            if((g_motor1_journey_cm <= (g_ftarget_journey+25)) && (g_motor1_journey_cm >= (g_ftarget_journey-25)))  //这里偏差这么多真的好吗？并不是真的偏差
-            //            {
-            //                g_stop_count++;   //stop_count不能超过256
-            //                if(g_stop_count >= 100)  //100 * 20 = 1.6s  最少也要至少在目标位置停留1s  //可以时间判断放长点，以便刹车停稳
-            //                {
-            //                    g_Line_Flag = 0;
-            //                    g_Stop_Flag = 1; //这个标志位可以用来判断是否执行下一阶段任务
-            //                    g_stop_count = 0;
-            //
-            //                    set_motor1_disable();
-            //                    set_motor2_disable();
-            //                }
-            //            }
             if (g_motor1_journey_cm == g_ftarget_journey)
             {
                 g_Line_Flag = 0;
@@ -702,9 +688,13 @@ float line_pid_control(void)
     float cont_val = 0.0; // 当前控制值
     int32_t actual_speed;
 
-    // 这里的实际值我给的是角度偏差的值，如果是灰度传感器巡线可以把传感器的值送进去
-    g_yaw_err = yaw_err0();
-    actual_speed = g_yaw_err;
+    int32_t line_data[4] = {0}; // 巡线传感器数据
+    line_err(line_data);
+    for (int i = 0; i < 4; i++)
+    {
+        g_line_err += line_data[i] * weight[i];
+    }
+    actual_speed = g_line_err; // 巡线环的实际速度是巡线偏移量
 
     cont_val = line_pid_realize(&g_pid_line, actual_speed); // 进行 PID 计算
 
