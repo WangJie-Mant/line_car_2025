@@ -45,3 +45,4 @@ f103c8t6_test\main.o: ../HARDWARE/JY61P/jy61p.h
 f103c8t6_test\main.o: ../HARDWARE/KEY/key.h
 f103c8t6_test\main.o: ../HARDWARE/MENU/menu.h
 f103c8t6_test\main.o: ../HARDWARE/LINE/line.h
+f103c8t6_test\main.o: ../MDK-ARM/buzz.h

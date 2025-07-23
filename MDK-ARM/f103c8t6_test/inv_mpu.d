@@ -1,9 +1,9 @@
 f103c8t6_test\inv_mpu.o: ..\HARDWARE\MPU6050\eMPL\inv_mpu.c
-f103c8t6_test\inv_mpu.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdio.h
-f103c8t6_test\inv_mpu.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdint.h
-f103c8t6_test\inv_mpu.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdlib.h
-f103c8t6_test\inv_mpu.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\string.h
-f103c8t6_test\inv_mpu.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\math.h
+f103c8t6_test\inv_mpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+f103c8t6_test\inv_mpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+f103c8t6_test\inv_mpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+f103c8t6_test\inv_mpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+f103c8t6_test\inv_mpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 f103c8t6_test\inv_mpu.o: ..\HARDWARE\MPU6050\eMPL\inv_mpu.h
 f103c8t6_test\inv_mpu.o: ../Core/Inc/stm32f1xx_it.h
 f103c8t6_test\inv_mpu.o: ..\HARDWARE\MPU6050\eMPL\inv_mpu_dmp_motion_driver.h
@@ -23,7 +23,7 @@ f103c8t6_test\inv_mpu.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
 f103c8t6_test\inv_mpu.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h
 f103c8t6_test\inv_mpu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 f103c8t6_test\inv_mpu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-f103c8t6_test\inv_mpu.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stddef.h
+f103c8t6_test\inv_mpu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 f103c8t6_test\inv_mpu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h
 f103c8t6_test\inv_mpu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h
 f103c8t6_test\inv_mpu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h

@@ -21,13 +21,33 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
 Dialog DLL:      TCM.DLL V1.56.1.0
  
 <h2>Project:</h2>
-D:\Users\Lenovo\Desktop\HAl-keil5\固件库\STM32小车工程模板\STM32小车工程模板\1-工程源码\MyCar_V8.1\f103c8t6_test\MDK-ARM\f103c8t6_test.uvprojx
-Project File Date:  07/04/2025
+d:\Users\Lenovo\Desktop\HAl-keil5\初步代码\car_2025\MDK-ARM\f103c8t6_test.uvprojx
+Project File Date:  07/23/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin'
 Build target 'f103c8t6_test'
-"f103c8t6_test\f103c8t6_test.axf" - 0 Error(s), 0 Warning(s).
+compiling main.c...
+compiling control.c...
+..\HARDWARE\CONTROL\control.c(252): warning:  #177-D: variable "g_Line_Flag"  was declared but never referenced
+   uint8_t g_Line_Flag = 0;            //宸＄嚎鏍囧織浣?,0涓嶅贰绾?,1宸＄嚎
+..\HARDWARE\CONTROL\control.c(253): warning:  #177-D: variable "g_Stop_Flag"  was declared but never referenced
+  uint8_t g_Stop_Flag = 0;            //鍋滄鏍囧織浣?,0琛岄┒,1鍋滄
+..\HARDWARE\CONTROL\control.c(254): warning:  #177-D: variable "g_Spin_Start_Flag"  was declared but never referenced
+  uint8_t g_Spin_Start_Flag = 0;      //杞悜寮�濮嬫爣蹇椾綅
+..\HARDWARE\CONTROL\control.c(255): warning:  #177-D: variable "g_Spin_Succeed_Flag"  was declared but never referenced
+  uint8_t g_Spin_Succeed_Flag = 0;    //杞悜缁撴潫鏍囧織浣?
+..\HARDWARE\CONTROL\control.c(256): warning:  #177-D: variable "g_Turn_Flag"  was declared but never referenced
+  uint8_t g_Turn_Flag = 0;            //杞悜鏍囧織浣?,濂藉儚娌＄敤鍒?
+..\HARDWARE\CONTROL\control.c(257): warning:  #177-D: variable "g_Angle_Flag"  was declared but never referenced
+  uint8_t g_Angle_Flag = 0;           //瑙掑害鐜皟璇曟爣蹇椾綅
+..\HARDWARE\CONTROL\control.c(617): warning:  #177-D: variable "actual_speed"  was declared but never referenced
+      int32_t actual_speed;    
+..\HARDWARE\CONTROL\control.c: 7 warnings, 0 errors
+linking...
+Program Size: Code=16588 RO-data=8020 RW-data=128 ZI-data=2848  
+FromELF: creating hex file...
+"f103c8t6_test\f103c8t6_test.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -51,7 +71,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

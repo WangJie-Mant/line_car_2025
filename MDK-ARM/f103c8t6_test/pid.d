@@ -32,4 +32,3 @@ f103c8t6_test\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 f103c8t6_test\pid.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdio.h
 f103c8t6_test\pid.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdlib.h
 f103c8t6_test\pid.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\math.h
-f103c8t6_test\pid.o: ../HARDWARE/JY61P/jy61p.h

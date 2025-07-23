@@ -115,8 +115,3 @@ void set_motor2_disable(void)
     HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_1);
 }
 
-void car_stop(void)
-{
-	set_motor1_disable();
-	set_motor2_disable();
-}

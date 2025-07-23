@@ -49,7 +49,7 @@ void jy61p_ReceiveData(uint8_t RxData)
                 /*计算数据，根据数据内容选择对应的计算公式*/
 //              g_roll_jy61 = ((uint16_t) ((uint16_t) RxBuffer[3] << 8 | (uint16_t) RxBuffer[2])) / 32768.0f * 180.0f;
 //              g_pitch_jy61 = ((uint16_t) ((uint16_t) RxBuffer[5] << 8 | (uint16_t) RxBuffer[4])) / 32768.0f * 180.0f;
-                g_yaw_jy61 = ((uint16_t) ((uint16_t) RxBuffer[7] << 8 | (uint16_t) RxBuffer[6])) / 32768.0f * 180.0f;
+                g_yaw_jy61 = ((int16_t)(RxBuffer[7] << 8 | RxBuffer[6])) / 32768.0f * 180.0f ;
             }
             RxState = 0;
             RxIndex = 0; //读取完成，回到最初状态，等待包头

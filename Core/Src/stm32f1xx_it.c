@@ -262,7 +262,7 @@ void USART1_IRQHandler(void)
 //    dr = huart1.Instance->DR;
 //    protocol_data_recv(&dr, 1);
 //    
-//    HAL_GPIO_TogglePin(LED0_GPIO_Port,LED0_Pin);//翻转LED表示接收到命令
+//    HAL_GPIO_TogglePin(LED0_GPIO_Port,LED0_Pin);//翻转LED表示接收到命�?
     
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
@@ -289,10 +289,10 @@ void USART2_IRQHandler(void)
 //串口接收回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if(huart == &huart2)//判断中断源，接收jy901数据
+     if(huart->Instance == USART2)
     {
-        jy61p_ReceiveData(g_usart2_receivedata);//调用数据包处理函数
-        HAL_UART_Receive_IT(&huart2,&g_usart2_receivedata,1);//继续进行中断接收
+        jy61p_ReceiveData(g_usart2_receivedata); // 解析JY61P数据
+        HAL_UART_Receive_IT(&huart2, &g_usart2_receivedata, 1); // 重新�?启接�?
     }
 }
 /* USER CODE END 1 */
