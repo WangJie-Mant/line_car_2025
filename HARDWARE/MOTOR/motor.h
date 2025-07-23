@@ -30,7 +30,7 @@ void set_motor1_enable(void);
 void set_motor1_disable(void);
 void set_motor2_enable(void);
 void set_motor2_disable(void);
-void car_stop(void);
+
 #endif
 
 

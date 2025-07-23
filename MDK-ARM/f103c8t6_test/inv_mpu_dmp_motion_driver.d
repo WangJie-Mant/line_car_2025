@@ -1,9 +1,9 @@
 f103c8t6_test\inv_mpu_dmp_motion_driver.o: ..\HARDWARE\MPU6050\eMPL\inv_mpu_dmp_motion_driver.c
-f103c8t6_test\inv_mpu_dmp_motion_driver.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdio.h
-f103c8t6_test\inv_mpu_dmp_motion_driver.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdint.h
-f103c8t6_test\inv_mpu_dmp_motion_driver.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\stdlib.h
-f103c8t6_test\inv_mpu_dmp_motion_driver.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\string.h
-f103c8t6_test\inv_mpu_dmp_motion_driver.o: D:\Users\Lenovo\Desktop\HAl-keil5\keil5\core\ARM\ARMCC\Bin\..\include\math.h
+f103c8t6_test\inv_mpu_dmp_motion_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+f103c8t6_test\inv_mpu_dmp_motion_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+f103c8t6_test\inv_mpu_dmp_motion_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+f103c8t6_test\inv_mpu_dmp_motion_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+f103c8t6_test\inv_mpu_dmp_motion_driver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 f103c8t6_test\inv_mpu_dmp_motion_driver.o: ..\HARDWARE\MPU6050\eMPL\inv_mpu.h
 f103c8t6_test\inv_mpu_dmp_motion_driver.o: ../Core/Inc/stm32f1xx_it.h
 f103c8t6_test\inv_mpu_dmp_motion_driver.o: ..\HARDWARE\MPU6050\eMPL\inv_mpu_dmp_motion_driver.h

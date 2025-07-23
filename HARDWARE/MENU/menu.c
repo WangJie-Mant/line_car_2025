@@ -43,16 +43,16 @@ uint8_t menu_start_select(void)
             case 0:OLED_ShowString(16,16,"select       ",16,1);
                     OLED_Refresh();
                 break;
-            case 1:OLED_ShowString(16,16,"question1    ",16,1);
+            case 1:OLED_ShowString(16,16,"line_test    ",16,1);
                     OLED_Refresh();
                 break;
-            case 2:OLED_ShowString(16,16,"question2  ",16,1);
+            case 2:OLED_ShowString(16,16,"car_go_test  ",16,1);
                     OLED_Refresh();
                 break;
-            case 3:OLED_ShowString(16,16,"question3",16,1);
+            case 3:OLED_ShowString(16,16,"car_spin_test",16,1);
                     OLED_Refresh();
                 break;
-            case 4:OLED_ShowString(16,16,"question4    ",16,1);
+            case 4:OLED_ShowString(16,16,"turn_test    ",16,1);
                     OLED_Refresh();
                 break;
         }
