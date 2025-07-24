@@ -463,11 +463,12 @@ ARM Macro Assembler    Page 8
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=f103c8t6_test\startup_stm32f103xb.d -of103c8t6_test\startup_stm32f
-103xb.o -I.\RTE\_f103c8t6_test -IC:\Users\Walnut\AppData\Local\Arm\Packs\ARM\CM
-SIS\5.6.0\CMSIS\Core\Include -IC:\Users\Walnut\AppData\Local\Arm\Packs\Keil\STM
-32F1xx_DFP\2.3.0\Device\Include --predefine="__MICROLIB SETA 1" --predefine="__
-UVISION_VERSION SETA 524" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_MD 
-SETA 1" --list=startup_stm32f103xb.lst startup_stm32f103xb.s
+103xb.o -I.\RTE\_f103c8t6_test -ID:\Users\Lenovo\Desktop\HAl-keil5\keil5\pack\A
+RM\CMSIS\5.9.0\CMSIS\Core\Include -ID:\Users\Lenovo\Desktop\HAl-keil5\keil5\pac
+k\Keil\STM32F1xx_DFP\2.4.1\Device\Include --predefine="__MICROLIB SETA 1" --pre
+define="__UVISION_VERSION SETA 537" --predefine="_RTE_ SETA 1" --predefine="STM
+32F10X_MD SETA 1" --predefine="_RTE_ SETA 1" --list=startup_stm32f103xb.lst sta
+rtup_stm32f103xb.s
 
 
 

@@ -98,6 +98,7 @@ void Error_Handler(void);
 #define OLED_SDA_Pin GPIO_PIN_9
 #define OLED_SDA_GPIO_Port GPIOB
 
+extern int count; 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

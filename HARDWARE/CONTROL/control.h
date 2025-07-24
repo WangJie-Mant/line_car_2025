@@ -56,6 +56,7 @@ typedef enum
 /* 小车控制函数 */
 void car_go(int32_t distance_cm);
 void car_spin(spin_dir direction);
+void car_stop(void);
 
 /* pid实现函数 */
 float speed1_pid_control(void);
@@ -67,8 +68,9 @@ float turn_angle_pid_control(void);
 void turn_angle_speed_control(void);
 float line_pid_control(void);
 void line_speed_control(void);
-
-
-
+void car_spin_degree(float angle);
+void car_go_line(int32_t distance_cm);
+extern uint8_t g_Gostraght;
+extern  uint8_t g_Stop_Flag;
 extern float spin90_cm ;
 #endif
