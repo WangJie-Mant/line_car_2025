@@ -6,6 +6,7 @@ _pid g_pid_speed1, g_pid_speed2;
 _pid g_pid_location1, g_pid_location2;
 _pid g_pid_turn_angle;
 _pid g_pid_line;
+_pid g_pid_straight;
 
 /**
  * @brief  PID参数初始化
@@ -85,6 +86,14 @@ void pid_param_init(void)
   g_pid_line.Kp = 4.0;
   g_pid_line.Ki = 0.0;
   g_pid_line.Kd = 1.0;
+
+  g_pid_straight.kp = 1.0;
+  g_pid_straight.ki = 0.0;
+  g_pid_straight.kd = 0.0;
+  g_pid_straight.target_val = 0.0;
+  g_pid_straight.actual_val = 0.0;
+  g_pid_straight.err = 0.0;
+  g_pid_straight.err_last = 0.0;
 
   // #if defined(PID_ASSISTANT_EN)
   //     float pid_temp[3] = {pid.Kp, pid.Ki, pid.Kd};
@@ -276,3 +285,24 @@ float turn_angle_pid_realize(_pid *pid, float actual_val)
 //     /*返回当前实际值*/
 //     return pid->actual_val;
 // }
+
+float straight_pid_realize(_pid *p, float current)
+{
+  /*
+  该函数已经在参数表中给出target，不需要与pid_set_target配套使用
+  */
+  p->err = p->target_val - current; // 计算误差
+
+  if (p->err > 180.0f)
+    p->err -= 360.0f;
+  else if (p->err < -180.0f)
+    p->err += 360.0f;
+
+  // PID计算
+  p->actual_val = p->Kp * p->err + p->Kd * (p->err - p->err_last);
+
+  // 更新上次误差
+  p->err_last = p->err;
+
+  return p->actual_val; // 返回PID输出值
+}

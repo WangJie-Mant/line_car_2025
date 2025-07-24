@@ -57,8 +57,8 @@
 uint8_t g_oledstring[50];                    // OLED显示
 float g_pitch_6050, g_roll_6050, g_yaw_6050; // MPU6050的俯仰角 横滚�??? 航向�???
 extern uint8_t g_usart2_receivedata;         // 串口2接收数据
-uint8_t g_mode = 0;     
-                   // 小车运行模式
+uint8_t g_mode = 0;
+// 小车运行模式
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -75,13 +75,13 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int count = 0; 
+int count = 0;
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -152,130 +152,132 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
- 
-  //car_go(220);
-  //car_spin(back_180);
-  // load_motor_pwm(500,500);
-   //car_spin(left_90);
-   //car_stop(); 
+
+  // car_go(220);
+  // car_spin(back_180);
+  //  load_motor_pwm(500,500);
+  // car_spin(left_90);
+  // car_stop();
   // car_spin_degree(120);
-   
-  while (1)
+
+    while (1)
   {
     //      receiving_process();//解析野火上位机�?�信协议,调试电机位置速度串级PID时用,不用时注�???
-// if(g_Stop_Flag==0&&count==0){
-//    Buzz(10000);
-//    g_Stop_Flag=1;
-//     car_go(95);
-//  }
-// if(g_Stop_Flag==0&&count==1){
-//    Buzz(10000);
-//    g_Stop_Flag=1;
-//     car_go_line(122);
-//		 detect_line(); 
-//  }
-//	if(g_Stop_Flag==0&&count==2)
-// {
-//  g_Stop_Flag=1;
-//  Buzz(10000);
-//  car_spin_degree(179.5);
-//}    
-// if(g_Stop_Flag==0&&count==3)
-// {
-//	  Buzz(10000);
-//	  g_Stop_Flag=1;
-//		car_go(105);
-// }
-//  if(g_Stop_Flag==0&&count==4)
-// {
-//	  Buzz(10000);
-//	  g_Stop_Flag=1;
-//		car_go_line(125);
-// }
- 
-// 
-// if(g_Stop_Flag==0&&count==0){
-//    Buzz(10000);
-//    g_Stop_Flag=1;
-//     car_go(130);
-//  }
-// if(g_Stop_Flag==0&&count==1){
-//    Buzz(10000);
-//    g_Stop_Flag=1;
-//     car_go_line(128);
-//		 detect_line(); 
-//  }
-//	if(g_Stop_Flag==0&&count==2)
-// {
-//  g_Stop_Flag=1;
-//  Buzz(10000);
-//  car_spin_degree(-128.66);
-//}    
-// if(g_Stop_Flag==0&&count==3)
-// {
-//	  Buzz(10000);
-//	  g_Stop_Flag=1;
-//		car_go(130);
-// }
-//  if(g_Stop_Flag==0&&count==4)
-// {
-//	  Buzz(10000);
-//	  g_Stop_Flag=1;
-//		car_go_line(125);
-// }
-//  
+    // if(g_Stop_Flag==0&&count==0){
+    //    Buzz(10000);
+    //    g_Stop_Flag=1;
+    //     car_go(95);
+    //  }
+    // if(g_Stop_Flag==0&&count==1){
+    //    Buzz(10000);
+    //    g_Stop_Flag=1;
+    //     car_go_line(122);
+    //		 detect_line();
+    //  }
+    //	if(g_Stop_Flag==0&&count==2)
+    // {
+    //  g_Stop_Flag=1;
+    //  Buzz(10000);
+    //  car_spin_degree(179.5);
+    //}
+    // if(g_Stop_Flag==0&&count==3)
+    // {
+    //	  Buzz(10000);
+    //	  g_Stop_Flag=1;
+    //		car_go(105);
+    // }
+    //  if(g_Stop_Flag==0&&count==4)
+    // {
+    //	  Buzz(10000);
+    //	  g_Stop_Flag=1;
+    //		car_go_line(125);
+    // }
 
- if(g_Stop_Flag==0&&count==0){
-    Buzz(10000);
-    g_Stop_Flag=1;
-    car_spin_degree(-35.66);
-  }
- if(g_Stop_Flag==0&&count==1){
-    Buzz(10000);
-    g_Stop_Flag=1;
-     car_go(128);
-  }
- if(g_Stop_Flag==0&&count==2){
-    Buzz(10000);
-    g_Stop_Flag=1;
-     car_go_line(128);
-		 detect_line(); 
-  }
- if(g_Stop_Flag==0&&count==3)
- {
-  g_Stop_Flag=1;
-  Buzz(10000);
-  car_spin_degree(-179.5);
- }
-if(g_Stop_Flag==0&&count==4)
- {
-    Buzz(10000);
-    g_Stop_Flag=1;
-    car_go(6);
- }
-	if(g_Stop_Flag==0&&count==5)
- {
-  g_Stop_Flag=1;
-  Buzz(10000);
-  car_spin_degree(-130.66);
-}    
- if(g_Stop_Flag==0&&count==6)
- {
-	  Buzz(10000);
-	  g_Stop_Flag=1;
-		car_go(130);
- }
-  if(g_Stop_Flag==0&&count==7)
- {
-	  Buzz(10000);
-	  g_Stop_Flag=1;
-		car_go_line(125);
- }
+    //
+    // if(g_Stop_Flag==0&&count==0){
+    //    Buzz(10000);
+    //    g_Stop_Flag=1;
+    //     car_go(130);
+    //  }
+    // if(g_Stop_Flag==0&&count==1){
+    //    Buzz(10000);
+    //    g_Stop_Flag=1;
+    //     car_go_line(128);
+    //		 detect_line();
+    //  }
+    //	if(g_Stop_Flag==0&&count==2)
+    // {
+    //  g_Stop_Flag=1;
+    //  Buzz(10000);
+    //  car_spin_degree(-128.66);
+    //}
+    // if(g_Stop_Flag==0&&count==3)
+    // {
+    //	  Buzz(10000);
+    //	  g_Stop_Flag=1;
+    //		car_go(130);
+    // }
+    //  if(g_Stop_Flag==0&&count==4)
+    // {
+    //	  Buzz(10000);
+    //	  g_Stop_Flag=1;
+    //		car_go_line(125);
+    // }
+    //
+
+    if (g_Stop_Flag == 0 && count == 0)
+    {
+      Buzz(10000);
+      g_Stop_Flag = 1;
+      car_spin_degree(-35.66);
+    }
+    if (g_Stop_Flag == 0 && count == 1)
+    {
+      Buzz(10000);
+      g_Stop_Flag = 1;
+      car_go(128);
+    }
+    if (g_Stop_Flag == 0 && count == 2)
+    {
+      Buzz(10000);
+      g_Stop_Flag = 1;
+      car_go_line(128);
+    }
+    if (g_Stop_Flag == 0 && count == 3)
+    {
+      g_Stop_Flag = 1;
+      Buzz(10000);
+      car_spin_degree(-179.5);
+    }
+    if (g_Stop_Flag == 0 && count == 4)
+    {
+      Buzz(10000);
+      g_Stop_Flag = 1;
+      car_go(6);
+    }
+    if (g_Stop_Flag == 0 && count == 5)
+    {
+      g_Stop_Flag = 1;
+      Buzz(10000);
+      car_spin_degree(-130.66);
+    }
+    if (g_Stop_Flag == 0 && count == 6)
+    {
+      Buzz(10000);
+      g_Stop_Flag = 1;
+      car_go(130);
+    }
+    if (g_Stop_Flag == 0 && count == 7)
+    {
+      Buzz(10000);
+      g_Stop_Flag = 1;
+      car_go_line(125);
+    }
     /* 菜单测试 */
 
     if (g_mode == 0) // 启动菜单选择
     {
-      //g_mode = menu_start_select();
+      // g_mode = menu_start_select();
       //	car_go(205);
     }
     else if (g_mode == 1) // 巡线直行测试
@@ -343,7 +345,7 @@ if(g_Stop_Flag==0&&count==4)
         }
       }
     }
-     sprintf((char *)g_oledstring, "Yaw:%6.2f", g_yaw_jy61); // 显示
+    sprintf((char *)g_oledstring, "Yaw:%6.2f", g_yaw_jy61); // 显示
     OLED_ShowString(0, 32, g_oledstring, 16, 1);            // 这个是oled驱动里面的，是显示位置的�???个函数，
     OLED_Refresh();
 
@@ -389,17 +391,17 @@ if(g_Stop_Flag==0&&count==4)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
@@ -413,9 +415,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -429,12 +430,12 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-/* USER CODE END 4 */ 
+/* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -446,14 +447,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
