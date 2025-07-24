@@ -42,7 +42,7 @@ uint8_t g_Spin_Start_Flag = 0;   // 转向开始标志位
 uint8_t g_Spin_Succeed_Flag = 0; // 转向结束标志位
 uint8_t g_Turn_Flag = 0;         // 转向标志位,好像没用到
 uint8_t g_Angle_Flag = 0;        // 角度环调试标志位
-
+uint8_t g_Gostraght=0;
 int32_t g_line_num = 0;  // 灰度巡线偏移量
 float g_line_outval = 0; // 巡线差值量
 int32_t g_yaw_err = 0;   // 角度偏移量
@@ -50,7 +50,7 @@ int32_t g_yaw_err = 0;   // 角度偏移量
 extern uint8_t g_mode; // 运行哪个功能
 
 float spin90_cm = 0;
-
+	int count2=0;
 /* 定时器回调函数,pid控制在这里进行,周期20ms */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -68,104 +68,26 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         g_motor1_journey_cm = (g_sigma_motor1pluse / (REDUCTION_RATIO * ENCODER_TOTAL_RESOLUTION)) * (WHEEL_D * 3.1416);
         g_motor2_journey_cm = (g_sigma_motor2pluse / (REDUCTION_RATIO * ENCODER_TOTAL_RESOLUTION)) * (WHEEL_D * 3.1416);
 
+        
         /* ***** */
-
-        //        /*****上位机调试速度环PID时用,实际运行时注释掉*****/
-        //          /* pid控制 */
-        //        if(g_is_motor1_en == 1)
-        //        {
-        //            g_motor1_pwm = speed1_pid_control();
-        //        }
-        //        if(g_is_motor2_en == 1)
-        //        {
-        //            g_motor2_pwm = speed2_pid_control();
-        //        }
-        //        /* 限幅 */
-        //        limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //        /* 装载 */
-        //        load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-
-        /******/
-
-        //        if(g_mode == 2 || g_mode == 3)
-        //        {
-        //            /******上位机调试位置速度串级PID时用，实际使用时注释掉******/
-        //            if(g_is_motor1_en == 1 && g_is_motor2_en == 1)
-        //            {
-        //                /* pid控制 */
-        //                location_speed_control();
-        //                g_motor1_pwm = g_speed1_outval;
-        //                g_motor2_pwm = g_speed2_outval;
-        //
-        //                /* 限幅 */
-        //                limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //                /* 装载 */
-        //                load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-        //            }
-        //        }
-        //
-        //        /* ***** */
-        //
-        //        if(g_mode == 4)
-        //        {
-        //            /****** 上位机调试角度速度串级PID时用，实际使用时注释掉 ******/
-        //            if(g_Angle_Flag == 1)
-        //            {
-        //                if(g_is_motor1_en == 1 && g_is_motor2_en == 1)
-        //                {
-        //                    /* pid控制 */
-        //                    turn_angle_speed_control();
-        //                    g_motor1_pwm = g_speed3_outval;
-        //                    g_motor2_pwm = g_speed4_outval;
-        //
-        //                    /* 限幅 */
-        //                    limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //                    /* 装载 */
-        //                    load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-        //                }
-        //            }
-        //        }
-        //
-        //        /* ***** */
-        //
-        //        if(g_mode == 1)
-        //        {
-        //            /****** 上位机调试巡线速度串级PID时用，实际使用时注释掉 ******/
-        //            if(g_Line_Flag == 1)
-        //            {
-        //                if(g_is_motor1_en == 1 && g_is_motor2_en == 1)
-        //                {
-        //                    /* pid控制 */
-        //                    line_speed_control();
-        //
-        //                    g_motor1_pwm = g_speed3_outval;
-        //                    g_motor2_pwm = g_speed4_outval;
-        //                    /* 限幅 */
-        //                    limit_motor_pwm(&g_motor1_pwm,&g_motor2_pwm);
-        //                    /* 装载 */
-        //                    load_motor_pwm(g_motor1_pwm,g_motor2_pwm);
-        //                }
-        //            }
-        //        }
-        /* ***** */
-
+				 
         if (g_Line_Flag == 1)
         {
             // 来个判断，直行到达位置后停止PID控制，防止识别图片时或者等待装卸药时电机耗能，直走巡线结束的阶段才用这个，
             // 其实这个要是用好一点的驱动模块的话，短时间内运行也不需要.....不用怕电机驱动过热...一直PID控制也没啥
             //     调试位置速度串级PID时注释掉这个让电机失能的函数
-            if (g_motor1_journey_cm == g_ftarget_journey)
+            if (g_motor1_journey_cm >=g_ftarget_journey-2 ||detect_line())
             {
                 g_Line_Flag = 0;
-                g_Stop_Flag = 1; // 这个标志位可以用来判断是否执行下一阶段任务
+                g_Stop_Flag = 0; // 这个标志位可以用来判断是否执行下一阶段任务
                 g_stop_count = 0;
-
-                set_motor1_disable();
+                set_motor1_disable(); 
                 set_motor2_disable();
+                count++;
             }
             else
             {
-                g_Stop_Flag = 0;
+                g_Stop_Flag = 1;
                 g_stop_count = 0;
             }
             if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
@@ -189,6 +111,45 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             }
         }
 
+				 if (g_Gostraght == 1)
+        {
+            // 来个判断，直行到达位置后停止PID控制，防止识别图片时或者等待装卸药时电机耗能，直走巡线结束的阶段才用这个，
+            // 其实这个要是用好一点的驱动模块的话，短时间内运行也不需要.....不用怕电机驱动过热...一直PID控制也没啥
+            //     调试位置速度串级PID时注释掉这个让电机失能的函数
+            if (g_motor1_journey_cm >=g_ftarget_journey-5)
+            {
+                g_Line_Flag = 0;
+                g_Stop_Flag = 0; // 这个标志位可以用来判断是否执行下一阶段任务
+                g_stop_count = 0;
+                set_motor1_disable();
+                set_motor2_disable();
+                count++;
+            }
+            else
+            {
+                g_Stop_Flag = 1;
+                g_stop_count = 0;
+            }
+           if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
+            {
+                location_speed_control(); // 位置环速度环串级PID的输出是速度环输出的PWM值
+                g_line_num = line_pid_control();
+                if (g_line_num == 0) // 每次回到线上需要补偿的时候，都将两个电机的累计脉冲数取平均值，这个也会有在转向后帮助回到线上的效果
+                {
+                    long pulse;
+                    pulse = (g_sigma_motor1pluse + g_sigma_motor2pluse) / 2;
+                    g_sigma_motor1pluse = pulse; // 可能有时候这里加上个补偿会更好
+                    g_sigma_motor2pluse = pulse;
+                }
+                // 这个是灰度传感器的巡线补偿
+                g_line_outval = g_line_num; // g_line_num得在PWM的重装载值一半左右才会有明显的效果
+                g_motor1_pwm = g_speed1_outval + g_line_outval;
+                g_motor2_pwm = g_speed2_outval - g_line_outval;
+
+                limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
+                load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
+            }
+        }
         /* ****** */
 
         /*转弯*/
@@ -206,7 +167,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                     set_motor1_disable();
                     set_motor2_disable();
                     g_Spin_Start_Flag = 0;
-                    g_Stop_Flag = 1;
+                    g_Stop_Flag = 0;
+                    count++;
                 }
             }
         }
@@ -214,11 +176,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         if (g_Angle_Flag == 1)
         {
-            // 清除其他标志位
-            g_Line_Flag = 0;
-            g_Stop_Flag = 0;
-            g_stop_count = 0;
-
             set_motor1_enable();                            // 使能电机控制PWM输出
             set_motor2_enable();                            // 使能电机2控制PWM输出
             if (g_is_motor1_en == 1 || g_is_motor2_en == 1) // 电机在使能状态下才进行控制处理
@@ -228,17 +185,35 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                 g_motor2_pwm = g_speed4_outval;
                 limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
                 load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
-                int count = 0;
-                if (g_pid_turn_angle.target_val + 2 > g_yaw_jy61 && g_yaw_jy61 > g_pid_turn_angle.target_val - 2) // 这里的角度误差可以调节
+                int count1 = 0;
+							if(g_pid_turn_angle.target_val>0)
+            {
+                if (g_yaw_jy61 >=g_pid_turn_angle.target_val-12) // 这里的角度误差可以调节
                 {
-                    count++;
-                    if (count > 25)
-                    {
+                  
                         set_motor1_disable();
                         set_motor2_disable();
                         g_Angle_Flag = 0;
-                    } // 转向完成后将标志位清零
+												g_Stop_Flag = 0;
+                          count++;
+                     // 转向完成后将标志位清零
                 }
+			}else if(g_pid_turn_angle.target_val<0){
+					
+			         if (g_yaw_jy61 <=g_pid_turn_angle.target_val+2&&g_yaw_jy61 >=g_pid_turn_angle.target_val-2) // 这里的角度误差可以调节
+                {
+							count2++;
+                if(count2>=10){
+                        set_motor1_disable();
+                        set_motor2_disable();
+                        g_Angle_Flag = 0;
+						g_Stop_Flag = 0;
+                        count2=0;
+                          count++;
+                    }
+                     // 转向完成后将标志位清零
+                }  
+							}	
             }
         }
         /* ***** */
@@ -250,7 +225,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void car_stop(void)
 {
     uint8_t g_Line_Flag = 0;         // 巡线标志位,0不巡线,1巡线
-    uint8_t g_Stop_Flag = 0;         // 停止标志位,0行驶,1停止
+    uint8_t g_Stop_Flag = 1;         // 停止标志位,0行驶,1停止
     uint8_t g_Spin_Start_Flag = 0;   // 转向开始标志位
     uint8_t g_Spin_Succeed_Flag = 0; // 转向结束标志位
     uint8_t g_Turn_Flag = 0;         // 转向标志位,好像没用到
@@ -271,18 +246,10 @@ void car_go(int32_t distance_cm)                // 直走函数     //连续两�
     float target_pluse; // 目标距离对应的脉冲值
 
     /* 设置对应标志位 */
-    g_Line_Flag = 1;
-    g_Stop_Flag = 0;
-
+    g_Line_Flag = 0;
     g_Spin_Start_Flag = 0;
     g_Spin_Succeed_Flag = 0;
-
-    //  if(location_cm < 0)
-    //  {
-    //      LineNumToggleFlag = 1;
-    //  }
-    //  else LineNumToggleFlag = 0;
-
+	  g_Gostraght=1;
     /* 清除上次走的路程记录 */
     g_motor1_journey_cm = 0; // 之前没清除所以用不了
     g_motor2_journey_cm = 0;
@@ -305,6 +272,36 @@ void car_go(int32_t distance_cm)                // 直走函数     //连续两�
     set_motor2_enable(); // 使能电机2控制PWM输出
 }
 
+void car_go_line(int32_t distance_cm)                // 直走函数     //连续两次的直行好像会让巡线补偿失效
+{
+    float target_pluse; // 目标距离对应的脉冲值
+
+    /* 设置对应标志位 */
+    g_Line_Flag = 1;
+    g_Spin_Start_Flag = 0;
+    g_Spin_Succeed_Flag = 0;
+		g_Gostraght=0;
+    /* 清除上次走的路程记录 */
+    g_motor1_journey_cm = 0; // 之前没清除所以用不了
+    g_motor2_journey_cm = 0;
+    g_sigma_motor1pluse = 0;
+    g_sigma_motor2pluse = 0;
+
+    g_ftarget_journey = distance_cm; // 防止长时间PID控制用
+
+    /* 将目标距离转换为对应的脉冲值，设为位置环期望 */
+    // 如果巡线效果不好就将3.142加大
+    target_pluse = (distance_cm / (WHEEL_D * 3.1416)) * (REDUCTION_RATIO * ENCODER_TOTAL_RESOLUTION); // 将distance_cm 转换为对应的脉冲数脉冲数
+    // 小车位置直接用一个电机的脉冲数累积就好，转向时不计数，开始一个位置前直接清零。
+    // 打滑导致一个轮比另一个轮转位置不一样咋办,用“巡线环“弥补就好，转向就用“转向环”
+    /* 设为位置环期望 */
+    set_pid_target(&g_pid_location1, target_pluse);
+    set_pid_target(&g_pid_location2, target_pluse);
+
+    /* 使能电机 */
+    set_motor1_enable(); // 使能电机控制PWM输出
+    set_motor2_enable(); // 使能电机2控制PWM输出
+}
 /**
  * @brief       小车旋转控制函数
  * @param       left_90左转90度,right_90右转90度,back_180掉头
@@ -319,8 +316,8 @@ void car_spin(spin_dir direction) // 原地转向可以直接 调用这个  //�
 
     /* 设置对应标志位 */
     g_Line_Flag = 0; // 不进行巡线的补偿了
-    g_Stop_Flag = 0; // 执行转弯时，将直走完成的标志位清零. 即如果上一次是直行，这次是转弯，则不用在业务代码里手动置位
-
+    // 执行转弯时，将直走完成的标志位清零. 即如果上一次是直行，这次是转弯，则不用在业务代码里手动置位
+		g_Gostraght=0;
     g_Spin_Start_Flag = 1;
     g_Spin_Succeed_Flag = 0;
 
@@ -354,6 +351,26 @@ void car_spin(spin_dir direction) // 原地转向可以直接 调用这个  //�
 
     set_motor1_enable(); // 使能电机控制PWM输出
     set_motor2_enable(); // 使能电机2控制PWM输出
+}
+
+void car_spin_degree(float angle)
+{
+	 /* 设置对应标志位 */
+    g_Line_Flag = 0;   	
+	  g_Angle_Flag=1;
+    g_Spin_Start_Flag = 0;
+    g_Spin_Succeed_Flag = 0;  
+    g_Gostraght=0;
+    /* 清除上次走的路程记录 */
+    g_motor1_journey_cm = 0;    //之前没清除所以用不了
+    g_motor2_journey_cm = 0;
+    g_sigma_motor1pluse = 0;
+    g_sigma_motor2pluse = 0; 
+		
+
+		set_pid_target(&g_pid_turn_angle,angle);
+	    set_motor1_enable(); // 使能电机控制PWM输出
+    set_motor2_enable(); // 使能电机2控制PWM输出	
 }
 
 /*********************各PID**********************/

@@ -17,5 +17,5 @@ float line_pid_realize(int err); // 灰度巡线PID控制函数
 int32_t line_err(void);
 int32_t yaw_err0(void);
 int32_t yaw_err180(void);
-
+int detect_line(void);
 #endif

@@ -1,3 +1,4 @@
 Load "f103c8t6_test\\f103c8t6_test.axf" 
-Erase Done.Programming Done.Verify OK.Application running ...
-Flash Load finished at 18:07:27
+Internal command error
+Error: Flash Download failed  -  Target DLL has been cancelled
+Flash Load finished at 17:56:22

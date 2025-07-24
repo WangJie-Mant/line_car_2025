@@ -57,7 +57,8 @@
 uint8_t g_oledstring[50];                    // OLED显示
 float g_pitch_6050, g_roll_6050, g_yaw_6050; // MPU6050的俯仰角 横滚�??? 航向�???
 extern uint8_t g_usart2_receivedata;         // 串口2接收数据
-uint8_t g_mode = 0;                          // 小车运行模式
+uint8_t g_mode = 0;     
+                   // 小车运行模式
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -74,7 +75,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int count = 0; 
 /* USER CODE END 0 */
 
 /**
@@ -151,25 +152,130 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-  //car_go(220);
-  g_Angle_Flag = 1;
-  set_pid_target(&g_pid_turn_angle,178 );
+ 
   //car_go(220);
   //car_spin(back_180);
-  Buzz(10000);
   // load_motor_pwm(500,500);
    //car_spin(left_90);
-   //car_stop();
+   //car_stop(); 
+  // car_spin_degree(120);
+   
   while (1)
   {
     //      receiving_process();//解析野火上位机�?�信协议,调试电机位置速度串级PID时用,不用时注�???
+// if(g_Stop_Flag==0&&count==0){
+//    Buzz(10000);
+//    g_Stop_Flag=1;
+//     car_go(95);
+//  }
+// if(g_Stop_Flag==0&&count==1){
+//    Buzz(10000);
+//    g_Stop_Flag=1;
+//     car_go_line(122);
+//		 detect_line(); 
+//  }
+//	if(g_Stop_Flag==0&&count==2)
+// {
+//  g_Stop_Flag=1;
+//  Buzz(10000);
+//  car_spin_degree(179.5);
+//}    
+// if(g_Stop_Flag==0&&count==3)
+// {
+//	  Buzz(10000);
+//	  g_Stop_Flag=1;
+//		car_go(105);
+// }
+//  if(g_Stop_Flag==0&&count==4)
+// {
+//	  Buzz(10000);
+//	  g_Stop_Flag=1;
+//		car_go_line(125);
+// }
+ 
+// 
+// if(g_Stop_Flag==0&&count==0){
+//    Buzz(10000);
+//    g_Stop_Flag=1;
+//     car_go(130);
+//  }
+// if(g_Stop_Flag==0&&count==1){
+//    Buzz(10000);
+//    g_Stop_Flag=1;
+//     car_go_line(128);
+//		 detect_line(); 
+//  }
+//	if(g_Stop_Flag==0&&count==2)
+// {
+//  g_Stop_Flag=1;
+//  Buzz(10000);
+//  car_spin_degree(-128.66);
+//}    
+// if(g_Stop_Flag==0&&count==3)
+// {
+//	  Buzz(10000);
+//	  g_Stop_Flag=1;
+//		car_go(130);
+// }
+//  if(g_Stop_Flag==0&&count==4)
+// {
+//	  Buzz(10000);
+//	  g_Stop_Flag=1;
+//		car_go_line(125);
+// }
+//  
 
-    //  	 car_go(100);
+ if(g_Stop_Flag==0&&count==0){
+    Buzz(10000);
+    g_Stop_Flag=1;
+    car_spin_degree(-35.66);
+  }
+ if(g_Stop_Flag==0&&count==1){
+    Buzz(10000);
+    g_Stop_Flag=1;
+     car_go(128);
+  }
+ if(g_Stop_Flag==0&&count==2){
+    Buzz(10000);
+    g_Stop_Flag=1;
+     car_go_line(128);
+		 detect_line(); 
+  }
+ if(g_Stop_Flag==0&&count==3)
+ {
+  g_Stop_Flag=1;
+  Buzz(10000);
+  car_spin_degree(-179.5);
+ }
+if(g_Stop_Flag==0&&count==4)
+ {
+    Buzz(10000);
+    g_Stop_Flag=1;
+    car_go(6);
+ }
+	if(g_Stop_Flag==0&&count==5)
+ {
+  g_Stop_Flag=1;
+  Buzz(10000);
+  car_spin_degree(-130.66);
+}    
+ if(g_Stop_Flag==0&&count==6)
+ {
+	  Buzz(10000);
+	  g_Stop_Flag=1;
+		car_go(130);
+ }
+  if(g_Stop_Flag==0&&count==7)
+ {
+	  Buzz(10000);
+	  g_Stop_Flag=1;
+		car_go_line(125);
+ }
     /* 菜单测试 */
+
     if (g_mode == 0) // 启动菜单选择
     {
-      g_mode = menu_start_select();
+      //g_mode = menu_start_select();
       //	car_go(205);
     }
     else if (g_mode == 1) // 巡线直行测试
@@ -237,7 +343,7 @@ int main(void)
         }
       }
     }
-    sprintf((char *)g_oledstring, "Yaw:%6.2f", g_yaw_jy61); // 显示
+     sprintf((char *)g_oledstring, "Yaw:%6.2f", g_yaw_jy61); // 显示
     OLED_ShowString(0, 32, g_oledstring, 16, 1);            // 这个是oled驱动里面的，是显示位置的�???个函数，
     OLED_Refresh();
 

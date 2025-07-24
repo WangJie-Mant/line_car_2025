@@ -1,5 +1,6 @@
 #include "line.h"
 #include "jy61p.h"
+#include "control.h"
 // 根据最大速度7200，放大PID参数，提升补偿效果
 #define LINE_KP 8.0f   // 推荐比例参数（原1.2，放大到8）
 #define LINE_KI 0.03f  // 推荐积分参数（原0.01，略微提升）
@@ -83,8 +84,15 @@ int32_t yaw_err180(void)
     else yaw_num=0;
     return yaw_num;
 }
-
-
+int detect_line(void)
+{		
+		if(HW1||HW2||HW3||HW4||HW5||HW6||HW7||HW8)return 0;
+		else{
+		car_stop();
+		g_Stop_Flag=0;
+		return 1;
+		}
+}
 
 
 
