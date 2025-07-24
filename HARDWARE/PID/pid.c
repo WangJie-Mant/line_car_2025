@@ -87,9 +87,9 @@ void pid_param_init(void)
   g_pid_line.Ki = 0.0;
   g_pid_line.Kd = 1.0;
 
-  g_pid_straight.kp = 1.0;
-  g_pid_straight.ki = 0.0;
-  g_pid_straight.kd = 0.0;
+  g_pid_straight.Kp = 1.0;
+  g_pid_straight.Ki = 0.0;
+  g_pid_straight.Kd = 0.0;
   g_pid_straight.target_val = 0.0;
   g_pid_straight.actual_val = 0.0;
   g_pid_straight.err = 0.0;

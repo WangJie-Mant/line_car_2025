@@ -159,8 +159,9 @@ int main(void)
   // car_spin(left_90);
   // car_stop();
   // car_spin_degree(120);
+  car_go(130, 0);
 
-    while (1)
+  while (1)
   {
     //      receiving_process();//解析野火上位机�?�信协议,调试电机位置速度串级PID时用,不用时注�???
     // if(g_Stop_Flag==0&&count==0){
