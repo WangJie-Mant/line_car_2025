@@ -196,6 +196,22 @@ float speed_pid_realize(_pid *pid, float actual_val)
   return pid->actual_val; // 这个值是速度环的输出值，并不是当前电机的实际值
 }
 
+void set_pid_relative_angle(_pid *p, float relative_angle, float current_angle)
+{
+  float target_angle = current_angle + relative_angle;
+
+  while (target_angle >= 360.0f)
+  {
+    target_angle -= 360.0f;
+  }
+  while (target_angle < 0.0f)
+  {
+    target_angle += 360.0f;
+  }
+
+  p->target_val = target_angle;
+}
+
 /**
  * @brief       角度环PID算法实现
  * @param       actual_val:实际值

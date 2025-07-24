@@ -37,7 +37,7 @@ int g_motor1_pwm = 0; // 电机1装载pwm值
 int g_motor2_pwm = 0; // 电机2装载pwm值
 
 uint8_t g_Line_Flag = 0;         // 巡线标志位,0不巡线,1巡线
-uint8_t g_Stop_Flag = 0;         // 停止标志位,0行驶,1停止
+uint8_t g_Stop_Flag = 1;         // 停止标志位,0行驶,1停止
 uint8_t g_Spin_Start_Flag = 0;   // 转向开始标志位
 uint8_t g_Spin_Succeed_Flag = 0; // 转向结束标志位
 uint8_t g_Turn_Flag = 0;         // 转向标志位,好像没用到
@@ -151,10 +151,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         if (g_Line_Flag == 1)
         {
-            // 来个判断，直行到达位置后停止PID控制，防止识别图片时或者等待装卸药时电机耗能，直走巡线结束的阶段才用这个，
-            // 其实这个要是用好一点的驱动模块的话，短时间内运行也不需要.....不用怕电机驱动过热...一直PID控制也没啥
-            //     调试位置速度串级PID时注释掉这个让电机失能的函数
             if (g_motor1_journey_cm == g_ftarget_journey)
+            {
+                g_Line_Flag = 0;
+                g_Stop_Flag = 1; // 这个标志位可以用来判断是否执行下一阶段任务
+                g_stop_count = 0;
+
+                set_motor1_disable();
+                set_motor2_disable();
+            }
+            else if (line_err() == 0 && Is_Off_Line())
             {
                 g_Line_Flag = 0;
                 g_Stop_Flag = 1; // 这个标志位可以用来判断是否执行下一阶段任务
@@ -610,4 +616,40 @@ float line_pid_control(void)
     int32_t err = line_err();
     cont_val = line_pid_realize(err * 2); // 放大补偿量，乘以2（可根据实际调试调整倍数）
     return cont_val;
+}
+
+void car_turn(float angle)
+{
+    float current_angle = g_yaw_jy61;
+
+    set_pid_relative_angle(&g_pid_turn_angle, angle, current_angle);
+
+    g_Angle_Flag = 1;
+
+    set_motor1_enable();
+    set_motor2_enable();
+}
+
+uint8_t Is_Turn_Finished(void)
+{
+    if (g_Angle_Flag == 1)
+    {
+        float angle_error = fabs(g_pid_turn_angle.err);
+        static uint8_t stable_count = 0;
+
+        if (angle_error <= 2.0f)
+        {
+            stable_count++;
+            if (stable_count > 25) // 稳定25个周期（500ms）
+            {
+                stable_count = 0;
+                return 1; // 转向完成
+            }
+        }
+        else
+        {
+            stable_count = 0;
+        }
+    }
+    return 0;
 }
