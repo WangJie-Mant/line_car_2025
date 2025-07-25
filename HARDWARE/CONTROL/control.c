@@ -164,10 +164,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                 location_speed_control(); // 位置环速度环串级PID的输出是速度环输出的PWM值
                 float angle_out = straight_pid_realize(&g_pid_straight, g_yaw_jy61);
                 // 这个是灰度传感器的巡线补偿
-							long pulse1;
-                    pulse1 = (g_sigma_motor1pluse + g_sigma_motor2pluse) / 2;
-                    g_sigma_motor1pluse = pulse1; // 可能有时候这里加上个补偿会更好
-                    g_sigma_motor2pluse = pulse1;
+                long pulse1;
+                pulse1 = (g_sigma_motor1pluse + g_sigma_motor2pluse) / 2;
+                g_sigma_motor1pluse = pulse1; // 可能有时候这里加上个补偿会更好
+                g_sigma_motor2pluse = pulse1;
                 g_motor1_pwm = g_speed1_outval + angle_out;
                 g_motor2_pwm = g_speed2_outval - angle_out;
 

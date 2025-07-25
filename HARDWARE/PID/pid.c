@@ -87,9 +87,9 @@ void pid_param_init(void)
   g_pid_line.Ki = 0.0;
   g_pid_line.Kd = 1.0;
 
-  g_pid_straight.Kp = 2.0; // 恢复到合理的比例参数
-  g_pid_straight.Ki = 0.1; // 恢复到小的积分项
-  g_pid_straight.Kd = 0.3; // 恢复到合理的微分参数
+  g_pid_straight.Kp = 9.67; // 降低比例参数，减少振荡 8.67   9.66
+  g_pid_straight.Ki = 2.60; // 添加小的积分项，消除稳态误差   2.57
+  g_pid_straight.Kd = 0.98; // 降低微分参数，减少噪声影响     0.98
   g_pid_straight.target_val = 0.0;
   g_pid_straight.actual_val = 0.0;
   g_pid_straight.err = 0.0;

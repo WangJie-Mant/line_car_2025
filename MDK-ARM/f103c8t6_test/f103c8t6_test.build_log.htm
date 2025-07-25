@@ -27,7 +27,32 @@ Project File Date:  07/24/2025
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'f103c8t6_test'
-"f103c8t6_test\f103c8t6_test.axf" - 0 Error(s), 0 Warning(s).
+compiling pid.c...
+compiling main.c...
+compiling control.c...
+..\HARDWARE\CONTROL\control.c(213): warning:  #177-D: variable "count1"  was declared but never referenced
+                  int count1 = 0;
+..\HARDWARE\CONTROL\control.c(255): warning:  #177-D: variable "g_Line_Flag"  was declared but never referenced
+      uint8_t g_Line_Flag = 0;         // 巡线标志�?,0不巡�?,1巡线
+..\HARDWARE\CONTROL\control.c(256): warning:  #177-D: variable "g_Stop_Flag"  was declared but never referenced
+      uint8_t g_Stop_Flag = 1;         // 停止标志�?,0行驶,1停止
+..\HARDWARE\CONTROL\control.c(257): warning:  #177-D: variable "g_Spin_Start_Flag"  was declared but never referenced
+      uint8_t g_Spin_Start_Flag = 0;   // 转向开始标志位
+..\HARDWARE\CONTROL\control.c(258): warning:  #177-D: variable "g_Spin_Succeed_Flag"  was declared but never referenced
+      uint8_t g_Spin_Succeed_Flag = 0; // 转向结束标志�?
+..\HARDWARE\CONTROL\control.c(259): warning:  #177-D: variable "g_Turn_Flag"  was declared but never referenced
+      uint8_t g_Turn_Flag = 0;         // 转向标志�?,好像没用�?
+..\HARDWARE\CONTROL\control.c(260): warning:  #177-D: variable "g_Angle_Flag"  was declared but never referenced
+      uint8_t g_Angle_Flag = 0;        // 角度环调试标志位
+..\HARDWARE\CONTROL\control.c(653): warning:  #177-D: variable "actual_speed"  was declared but never referenced
+      int32_t actual_speed;
+..\HARDWARE\CONTROL\control.c(55): warning:  #177-D: variable "g_last_angle_error"  was declared but never referenced
+  static float g_last_angle_error = 0;
+..\HARDWARE\CONTROL\control.c: 9 warnings, 0 errors
+linking...
+Program Size: Code=17068 RO-data=8020 RW-data=144 ZI-data=2880  
+FromELF: creating hex file...
+"f103c8t6_test\f103c8t6_test.axf" - 0 Error(s), 9 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -50,7 +75,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
