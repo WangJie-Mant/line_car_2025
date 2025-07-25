@@ -139,6 +139,9 @@ int main(void)
   OLED_ColorTurn(0);   // 0正常显示�???1 反色显示
   OLED_DisplayTurn(0); // 0正常显示 1 屏幕翻转显示
 
+  /* 初始化蜂鸣器，确保不响 */
+  Buzz_Init();
+
   /* MPU6050初始�??? */
   //  HAL_Delay(500);//延时0.5�??? 6050上电稳定后初始化
   //  MPU_Init(); //初始化MPU6050
@@ -160,9 +163,9 @@ int main(void)
   // car_stop();
   // car_spin_degree(120);
   car_go(130, 0);
-
   while (1)
   {
+
     //      receiving_process();//解析野火上位机�?�信协议,调试电机位置速度串级PID时用,不用时注�???
     // if(g_Stop_Flag==0&&count==0){
     //    Buzz(10000);
@@ -225,57 +228,55 @@ int main(void)
     //		car_go_line(125);
     // }
     //
-
-    if (g_Stop_Flag == 0 && count == 0)
-    {
-      Buzz(10000);
-      g_Stop_Flag = 1;
-      car_spin_degree(-35.66);
-    }
-    if (g_Stop_Flag == 0 && count == 1)
-    {
-      Buzz(10000);
-      g_Stop_Flag = 1;
-      car_go(128);
-    }
-    if (g_Stop_Flag == 0 && count == 2)
-    {
-      Buzz(10000);
-      g_Stop_Flag = 1;
-      car_go_line(128);
-    }
-    if (g_Stop_Flag == 0 && count == 3)
-    {
-      g_Stop_Flag = 1;
-      Buzz(10000);
-      car_spin_degree(-179.5);
-    }
-    if (g_Stop_Flag == 0 && count == 4)
-    {
-      Buzz(10000);
-      g_Stop_Flag = 1;
-      car_go(6);
-    }
-    if (g_Stop_Flag == 0 && count == 5)
-    {
-      g_Stop_Flag = 1;
-      Buzz(10000);
-      car_spin_degree(-130.66);
-    }
-    if (g_Stop_Flag == 0 && count == 6)
-    {
-      Buzz(10000);
-      g_Stop_Flag = 1;
-      car_go(130);
-    }
-    if (g_Stop_Flag == 0 && count == 7)
-    {
-      Buzz(10000);
-      g_Stop_Flag = 1;
-      car_go_line(125);
-    }
+    // if (g_Stop_Flag == 0 && count == 0)
+    // {
+    //   Buzz(10000);
+    //   g_Stop_Flag = 1;
+    //   car_spin_degree(-35.66);
+    // }
+    // if (g_Stop_Flag == 0 && count == 1)
+    // {
+    //   Buzz(10000);
+    //   g_Stop_Flag = 1;
+    //   car_go(128);
+    // }
+    // if (g_Stop_Flag == 0 && count == 2)
+    // {
+    //   Buzz(10000);
+    //   g_Stop_Flag = 1;
+    //   car_go_line(128);
+    // }
+    // if (g_Stop_Flag == 0 && count == 3)
+    // {
+    //   g_Stop_Flag = 1;
+    //   Buzz(10000);
+    //   car_spin_degree(-179.5);
+    // }
+    // if (g_Stop_Flag == 0 && count == 4)
+    // {
+    //   Buzz(10000);
+    //   g_Stop_Flag = 1;
+    //   car_go(6);
+    // }
+    // if (g_Stop_Flag == 0 && count == 5)
+    // {
+    //   g_Stop_Flag = 1;
+    //   Buzz(10000);
+    //   car_spin_degree(-130.66);
+    // }
+    // if (g_Stop_Flag == 0 && count == 6)
+    // {
+    //   Buzz(10000);
+    //   g_Stop_Flag = 1;
+    //   car_go(130);
+    // }
+    // if (g_Stop_Flag == 0 && count == 7)
+    // {
+    //   Buzz(10000);
+    //   g_Stop_Flag = 1;
+    //   car_go_line(125);
+    // }
     /* 菜单测试 */
-
     if (g_mode == 0) // 启动菜单选择
     {
       // g_mode = menu_start_select();
@@ -294,11 +295,11 @@ int main(void)
         {
         case KEY0_PRES:
           HAL_Delay(1000); // 给出时间拿开手，防止干扰车子启动
-          car_go(120);
+          // car_go(120);
           break;
         case KEY1_PRES:
           HAL_Delay(1000); // 给出时间拿开手，防止干扰车子启动
-          car_go(60);
+          // car_go(60);
           break;
         }
       }

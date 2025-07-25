@@ -87,13 +87,14 @@ void pid_param_init(void)
   g_pid_line.Ki = 0.0;
   g_pid_line.Kd = 1.0;
 
-  g_pid_straight.Kp = 1.0;
-  g_pid_straight.Ki = 0.0;
-  g_pid_straight.Kd = 0.0;
+  g_pid_straight.Kp = 2.0; // 恢复到合理的比例参数
+  g_pid_straight.Ki = 0.1; // 恢复到小的积分项
+  g_pid_straight.Kd = 0.3; // 恢复到合理的微分参数
   g_pid_straight.target_val = 0.0;
   g_pid_straight.actual_val = 0.0;
   g_pid_straight.err = 0.0;
   g_pid_straight.err_last = 0.0;
+  g_pid_straight.integral = 0.0;
 
   // #if defined(PID_ASSISTANT_EN)
   //     float pid_temp[3] = {pid.Kp, pid.Ki, pid.Kd};
@@ -293,13 +294,26 @@ float straight_pid_realize(_pid *p, float current)
   */
   p->err = p->target_val - current; // 计算误差
 
-  if (p->err > 180.0f)
+  // 角度误差归一化到[-180, 180]范围
+  while (p->err > 180.0f)
     p->err -= 360.0f;
-  else if (p->err < -180.0f)
+  while (p->err < -180.0f)
     p->err += 360.0f;
 
+  // 积分项累积（添加积分限幅防止积分饱和）
+  p->integral += p->err;
+  if (p->integral > 50.0f)
+    p->integral = 50.0f;
+  if (p->integral < -50.0f)
+    p->integral = -50.0f;
+
   // PID计算
-  p->actual_val = p->Kp * p->err + p->Kd * (p->err - p->err_last);
+  p->actual_val = p->Kp * p->err +
+                  p->Ki * p->integral +
+                  p->Kd * (p->err - p->err_last);
+
+  // 输出限幅，防止角度补偿过大
+  p->actual_val = limit_abs(p->actual_val, 800.0f);
 
   // 更新上次误差
   p->err_last = p->err;

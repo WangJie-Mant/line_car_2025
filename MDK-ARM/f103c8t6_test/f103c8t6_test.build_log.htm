@@ -27,30 +27,7 @@ Project File Date:  07/24/2025
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'f103c8t6_test'
-compiling control.c...
-..\HARDWARE\CONTROL\control.c(201): warning:  #177-D: variable "count1"  was declared but never referenced
-                  int count1 = 0;
-..\HARDWARE\CONTROL\control.c(243): warning:  #177-D: variable "g_Line_Flag"  was declared but never referenced
-      uint8_t g_Line_Flag = 0;         // 巡线标志�?,0不巡�?,1巡线
-..\HARDWARE\CONTROL\control.c(244): warning:  #177-D: variable "g_Stop_Flag"  was declared but never referenced
-      uint8_t g_Stop_Flag = 1;         // 停止标志�?,0行驶,1停止
-..\HARDWARE\CONTROL\control.c(245): warning:  #177-D: variable "g_Spin_Start_Flag"  was declared but never referenced
-      uint8_t g_Spin_Start_Flag = 0;   // 转向开始标志位
-..\HARDWARE\CONTROL\control.c(246): warning:  #177-D: variable "g_Spin_Succeed_Flag"  was declared but never referenced
-      uint8_t g_Spin_Succeed_Flag = 0; // 转向结束标志�?
-..\HARDWARE\CONTROL\control.c(247): warning:  #177-D: variable "g_Turn_Flag"  was declared but never referenced
-      uint8_t g_Turn_Flag = 0;         // 转向标志�?,好像没用�?
-..\HARDWARE\CONTROL\control.c(248): warning:  #177-D: variable "g_Angle_Flag"  was declared but never referenced
-      uint8_t g_Angle_Flag = 0;        // 角度环调试标志位
-..\HARDWARE\CONTROL\control.c(260): error:  #147-D: declaration is incompatible with "void car_go(int32_t)"  (declared at line 57 of "..\HARDWARE\CONTROL\control.h")
-  void car_go(int32_t distance_cm, float degree)  // 直走函数     //连续两次的直行好像会让巡线补偿失�?
-..\HARDWARE\CONTROL\control.c(641): warning:  #177-D: variable "actual_speed"  was declared but never referenced
-      int32_t actual_speed;
-..\HARDWARE\CONTROL\control.c(55): warning:  #177-D: variable "g_last_angle_error"  was declared but never referenced
-  static float g_last_angle_error = 0;
-..\HARDWARE\CONTROL\control.c: 9 warnings, 1 error
-compiling pid.c...
-"f103c8t6_test\f103c8t6_test.axf" - 1 Error(s), 9 Warning(s).
+"f103c8t6_test\f103c8t6_test.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -73,8 +50,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Target not created.
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

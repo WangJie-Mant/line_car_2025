@@ -56,6 +56,7 @@ static float g_last_angle_error = 0;
 
 float spin90_cm = 0;
 int count2 = 0;
+int count3 = 0;
 /* 定时器回调函数,pid控制在这里进行,周期20ms */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -89,7 +90,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             }
             else if (g_Straight_Flag == 1)
             {
-                set_pid_target(&g_pid_turn_angle, 0);
+                set_pid_target(&g_pid_turn_angle, 179.5);
                 turn_angle_pid_control();
 
                 g_motor1_pwm = g_speed3_outval;
@@ -98,12 +99,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                 limit_motor_pwm(&g_motor1_pwm, &g_motor2_pwm);
                 load_motor_pwm(g_motor1_pwm, g_motor2_pwm);
 
-                if (!detect_line())
+                if (g_yaw_jy61 <= g_pid_turn_angle.target_val + 2 && g_yaw_jy61 >= g_pid_turn_angle.target_val - 2) // 这里的角度误差可以调节
                 {
-                    set_motor1_disable();
-                    set_motor2_disable();
-                    g_Straight_Flag = 0;
-                    count++;
+                    count3++;
+                    if (count3 >= 10)
+                    {
+                        set_motor1_disable();
+                        set_motor2_disable();
+                        g_Angle_Flag = 0;
+                        g_Stop_Flag = 0;
+                        count3 = 0;
+                        count++;
+                    }
+                    // 转向完成后将标志位清零
                 }
             }
             else
@@ -137,7 +145,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             // 来个判断，直行到达位置后停止PID控制，防止识别图片时或者等待装卸药时电机耗能，直走巡线结束的阶段才用这个，
             // 其实这个要是用好一点的驱动模块的话，短时间内运行也不需要.....不用怕电机驱动过热...一直PID控制也没啥
             //     调试位置速度串级PID时注释掉这个让电机失能的函数
-            if (g_motor1_journey_cm >= g_ftarget_journey - 5 || !detect_line())
+            if (g_motor1_journey_cm >= g_ftarget_journey - 5)
             {
                 g_Line_Flag = 0;
                 g_Stop_Flag = 0; // 这个标志位可以用来判断是否执行下一阶段任务
@@ -156,6 +164,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                 location_speed_control(); // 位置环速度环串级PID的输出是速度环输出的PWM值
                 float angle_out = straight_pid_realize(&g_pid_straight, g_yaw_jy61);
                 // 这个是灰度传感器的巡线补偿
+							long pulse1;
+                    pulse1 = (g_sigma_motor1pluse + g_sigma_motor2pluse) / 2;
+                    g_sigma_motor1pluse = pulse1; // 可能有时候这里加上个补偿会更好
+                    g_sigma_motor2pluse = pulse1;
                 g_motor1_pwm = g_speed1_outval + angle_out;
                 g_motor2_pwm = g_speed2_outval - angle_out;
 

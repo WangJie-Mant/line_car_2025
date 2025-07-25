@@ -1,6 +1,5 @@
 f103c8t6_test\buzz.o: buzz.c
 f103c8t6_test\buzz.o: buzz.h
-f103c8t6_test\buzz.o: ../Core/Inc/tim.h
 f103c8t6_test\buzz.o: ../Core/Inc/main.h
 f103c8t6_test\buzz.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 f103c8t6_test\buzz.o: ../Core/Inc/stm32f1xx_hal_conf.h
@@ -33,3 +32,4 @@ f103c8t6_test\buzz.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 f103c8t6_test\buzz.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 f103c8t6_test\buzz.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 f103c8t6_test\buzz.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+f103c8t6_test\buzz.o: ../Core/Inc/tim.h
